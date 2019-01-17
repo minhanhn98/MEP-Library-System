@@ -40,7 +40,7 @@ func StartServer(host string, port int) {
 	dataMap := docsnap.Data()
 	fmt.Println(dataMap)
 
-	// * We might the below later
+	// * We might need the below later
 
 	// serverAdress := fmt.Sprintf("%s:%d", host, port)
 	// r := mux.NewRouter()
