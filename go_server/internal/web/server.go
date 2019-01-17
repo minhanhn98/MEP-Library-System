@@ -10,25 +10,33 @@ import (
 	"google.golang.org/api/option"
 )
 
+// Client is an exported reference to our
+// firestore. Its is closed once the server is closed.
 var Client *firestore.Client
 
+// StartServer establishes a connection to the
+// firebase database so that we're able to read
+// and write from it.
 func StartServer(host string, port int) {
 
-	// Before starting the server establish the connection to firestore
+	// Before starting the server establish the connection to firestore.
 	opt := option.WithCredentialsFile("./.credentials/mep-lib-pk.json")
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		logrus.Fatalf("error initializing app: %v\n", err)
 	}
 
+	// Assign te client.
 	Client, err := app.Firestore(context.Background())
 	if err != nil {
 		logrus.Fatalf("failed to create client: %v\n", err)
 	}
 
+	// Close it when the server closes.
 	defer Client.Close()
 
 	// * Testing
+	// TODO: Remove this test case
 	items := Client.Collection("items")
 	books := items.Doc("books")
 
@@ -41,6 +49,7 @@ func StartServer(host string, port int) {
 	fmt.Println(dataMap)
 
 	// * We might need the below later
+	// TODO: Implement server wrapper around firestore.
 
 	// serverAdress := fmt.Sprintf("%s:%d", host, port)
 	// r := mux.NewRouter()
