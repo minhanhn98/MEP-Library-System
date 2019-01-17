@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"mep-lib-system/internal/web"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -16,11 +18,19 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hello world!")
+
+		port, err := cmd.Flags().GetInt("port")
+		if err != nil {
+			logrus.Fatalf("could not get flag %q: %v\n", "port", err)
+		}
+
+		web.StartServer("localhost", port)
+
 	},
 }
 
 func init() {
+	rootCmd.Flags().IntP("port", "p", 8080, "the port to start the server on")
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
